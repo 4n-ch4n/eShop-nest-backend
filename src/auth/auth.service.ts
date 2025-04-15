@@ -31,9 +31,10 @@ export class AuthService {
       });
 
       await this.userRepository.save(user);
+      delete user.password;
 
       return {
-        ...user,
+        user,
         token: this.getJwtToken({ id: user.id }),
       };
     } catch (error) {
@@ -46,24 +47,33 @@ export class AuthService {
 
     const user = await this.userRepository.findOne({
       where: { email },
-      select: { email: true, password: true, id: true },
+      select: {
+        email: true,
+        password: true,
+        id: true,
+        fullName: true,
+        isActive: true,
+        roles: true,
+      },
     });
 
     if (!user)
       throw new UnauthorizedException('Credentials are not valid (email)');
 
-    if (!bcrypt.compareSync(password, user.password))
+    if (!bcrypt.compareSync(password, user.password!))
       throw new UnauthorizedException('Credentials are not valid (password)');
 
+    delete user.password;
+
     return {
-      ...user,
+      user,
       token: this.getJwtToken({ id: user.id }),
     };
   }
 
   checkAuthStatus(user: User) {
     return {
-      ...user,
+      user,
       token: this.getJwtToken({ id: user.id }),
     };
   }

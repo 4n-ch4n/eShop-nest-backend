@@ -37,7 +37,6 @@ export class MessageWsService {
   }
 
   getConnectedClients(): string[] {
-    console.log(this.connectedClients);
     return Object.keys(this.connectedClients);
   }
 

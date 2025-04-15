@@ -1,9 +1,8 @@
 import {
+  BadRequestException,
   Controller,
   Get,
-  HttpStatus,
   Param,
-  ParseFilePipeBuilder,
   Post,
   Res,
   UploadedFile,
@@ -63,23 +62,21 @@ export class FilesController {
   )
   uploadProductImage(
     // can be done with ParseFilePipeBuilder or with the fileFilter
-    @UploadedFile(
-      new ParseFilePipeBuilder()
-        .addFileTypeValidator({
-          fileType: /(jpg|jpeg|png|gif|bmp|webp|tiff|svg|ico)$/,
-        })
-        .build({
-          errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
-        }),
-    )
-    file: Express.Multer.File,
+    // new ParseFilePipeBuilder()
+    //   .addFileTypeValidator({
+    //     fileType: /(jpg|jpeg|png|gif|bmp|webp|tiff|svg|ico)$/,
+    //   })
+    //   .build({
+    //     errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+    //   }),
+    @UploadedFile() file: Express.Multer.File,
   ) {
-    // if (!file) {
-    //   throw new BadRequestException('Make sure that the file is an image');
-    // }
+    if (!file) {
+      throw new BadRequestException('Make sure that the file is an image');
+    }
 
     const secureUrl = `${this.configService.get('HOST_API')}/files/product/${file.filename}`;
 
-    return { secureUrl };
+    return { secureUrl, fileName: file.filename };
   }
 }

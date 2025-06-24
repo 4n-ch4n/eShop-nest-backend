@@ -2,7 +2,7 @@
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
 
-# Teslo API
+# API
 
 A RESTful API for managing products, users, authentication, file uploads, and real-time messaging, built with [NestJS](https://nestjs.com/).
 
@@ -64,8 +64,6 @@ A RESTful API for managing products, users, authentication, file uploads, and re
 
 - `yarn start:dev` - Start the server in development mode
 - `yarn build` - Build the project
-- `yarn test` - Run unit tests
-- `yarn test:e2e` - Run end-to-end tests
 - `docker-compose up -d` - Start the PostgreSQL database
 
 ## Environment Variables
@@ -73,6 +71,8 @@ A RESTful API for managing products, users, authentication, file uploads, and re
 See `.env.template` for all required variables:
 
 ```
+APP_VERSION=
+STAGE=
 DB_PASSWORD=
 DB_NAME=
 DB_HOST=
@@ -82,3 +82,29 @@ PORT=
 HOST_API=
 JWT_SECRET=
 ```
+
+## Docker Usage
+
+### Development
+
+To run the app in development mode with hot-reloading using Docker:
+
+```sh
+docker-compose up -d
+```
+
+This uses a bind mount (`.:/app/`) so changes on your host are reflected inside the container.  
+**Note:** The `watchOptions` in `tsconfig.json` are configured to ensure TypeScript detects file changes correctly when using Docker bind mounts.
+
+### Production
+
+To build and run the app for production:
+
+```sh
+docker compose -f docker-compose.prod.yml build
+docker compose -f docker-compose.prod.yml up -d
+```
+
+This will build the production image and start both the app and the database containers.
+
+---

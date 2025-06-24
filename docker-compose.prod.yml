@@ -1,14 +1,10 @@
 services:
   app:
-    depends_on:
-      - db
     build:
       context: .
       target: ${STAGE}
       dockerfile: Dockerfile
-    volumes:
-      - .:/app/
-      - /app/node_modules
+    image: anthonycl98/shop-backend
     container_name: shop-app
     ports:
       - ${PORT}:${PORT}

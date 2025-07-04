@@ -1,7 +1,7 @@
 FROM node:24-alpine AS dev
 WORKDIR /app
 COPY package.json ./
-RUN yarn install
+RUN npm install
 CMD [ "npm","run","start:dev" ]
 
 FROM node:24-alpine AS dev-deps
